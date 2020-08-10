@@ -67,7 +67,7 @@ class BatchGenerator_2D(DataLoaderBase):
         data = np.zeros((self.BATCH_SIZE, 1, self.PATCH_SIZE[0], self.PATCH_SIZE[1]), dtype=np.float32)
         seg = np.zeros((self.BATCH_SIZE, 1, self.PATCH_SIZE[0], self.PATCH_SIZE[1]), dtype=np.float32)
         types = np.random.choice(['ed', 'es'], self.BATCH_SIZE, True)
-        patients = np.random.choice(self._data.keys(), self.BATCH_SIZE, True)
+        patients = np.random.choice([*self._data.keys()], self.BATCH_SIZE, True)
         pathologies = []
         for nb in range(self.BATCH_SIZE):
             shp = self._data[patients[nb]][types[nb]+'_data'].shape

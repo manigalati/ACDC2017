@@ -20,7 +20,7 @@ import theano.tensor as T
 import numpy as np
 import theano
 import os
-import cPickle
+import pickle
 from utils import plotProgress
 import time
 from utils import soft_dice, hard_dice
@@ -50,7 +50,7 @@ def create_data_gen_train(patient_data_train, BATCH_SIZE, num_classes,
                                        PATCH_SIZE=(352, 352))
 
     tr_transforms = []
-    tr_transforms.append(MirrorTransform((2, 3)))
+    tr_transforms.append(MirrorTransform((0, 1)))
     tr_transforms.append(RndTransform(SpatialTransform((352, 352), list(np.array((352, 352))//2),
                                                        do_elastic_transform, alpha,
                                                        sigma,
@@ -61,7 +61,6 @@ def create_data_gen_train(patient_data_train, BATCH_SIZE, num_classes,
                                                        random_crop=False), prob=0.67,
                                       alternative_transform=RandomCropTransform((352, 352))))
     tr_transforms.append(ConvertSegToOnehotTransform(range(num_classes), seg_channel=0, output_key='seg_onehot'))
-
     tr_composed = Compose(tr_transforms)
     tr_mt_gen = MultiThreadedAugmenter(data_gen_train, tr_composed, num_workers, num_cached_per_worker, seeds)
     tr_mt_gen.restart()
@@ -70,7 +69,6 @@ def create_data_gen_train(patient_data_train, BATCH_SIZE, num_classes,
 
 def run(config_file, fold=0):
     cf = imp.load_source('cf', config_file)
-    print fold
     dataset_root = cf.dataset_root
     # ==================================================================================================================
     BATCH_SIZE = cf.BATCH_SIZE
@@ -93,6 +91,7 @@ def run(config_file, fold=0):
     # this is seeded, will be identical each time
     train_keys, test_keys = get_split(fold)
 
+    print(dataset_root)
     train_data = load_dataset(train_keys, root_dir=dataset_root)
     val_data = load_dataset(test_keys, root_dir=dataset_root)
 
@@ -177,7 +176,7 @@ def run(config_file, fold=0):
                                                    seeds=workers_seeds)  # new se has no brain mask
         epoch_start_time = time.time()
         learning_rate.set_value(np.float32(base_lr* lr_decay**epoch))
-        print "epoch: ", epoch, " learning rate: ", learning_rate.get_value()
+        print("epoch: ", epoch, " learning rate: ", learning_rate.get_value())
         train_loss = 0
         train_acc_tmp = 0
         train_loss_tmp = 0
@@ -186,10 +185,10 @@ def run(config_file, fold=0):
             data = data_dict["data"].astype(np.float32)
             seg = data_dict["seg_onehot"].astype(np.float32).transpose(0, 2, 3, 1).reshape((-1, num_classes))
             if batch_ctr != 0 and batch_ctr % int(np.floor(n_batches_per_epoch/n_feedbacks_per_epoch)) == 0:
-                print "number of batches: ", batch_ctr, "/", n_batches_per_epoch
-                print "training_loss since last update: ", \
+                print("number of batches: ", batch_ctr, "/", n_batches_per_epoch)
+                print("training_loss since last update: ", \
                     train_loss_tmp/np.floor(n_batches_per_epoch/(n_feedbacks_per_epoch-1)), " train accuracy: ", \
-                    train_acc_tmp/np.floor(n_batches_per_epoch/n_feedbacks_per_epoch)
+                    train_acc_tmp/np.floor(n_batches_per_epoch/n_feedbacks_per_epoch))
                 all_training_losses.append(train_loss_tmp/np.floor(n_batches_per_epoch/(n_feedbacks_per_epoch-1)))
                 all_training_accuracies.append(train_acc_tmp/np.floor(n_batches_per_epoch/(n_feedbacks_per_epoch-1)))
                 train_loss_tmp = 0
@@ -210,7 +209,7 @@ def run(config_file, fold=0):
                 break
 
         train_loss /= n_batches_per_epoch
-        print "training loss average on epoch: ", train_loss
+        print("training loss average on epoch: ", train_loss)
 
         val_loss = 0
         accuracies = []
@@ -234,10 +233,10 @@ def run(config_file, fold=0):
         for i in range(num_classes):
             dice_means[i] = all_dice[all_dice[:, i]!=2, i].mean()
         val_loss /= n_test_batches
-        print "val loss: ", val_loss
-        print "val acc: ", np.mean(accuracies), "\n"
-        print "val dice: ", dice_means
-        print "This epoch took %f sec" % (time.time()-epoch_start_time)
+        print("val loss: ", val_loss)
+        print("val acc: ", np.mean(accuracies), "\n")
+        print("val dice: ", dice_means)
+        print("This epoch took %f sec" % (time.time()-epoch_start_time))
         all_val_dice_scores.append(dice_means)
         all_validation_losses.append(val_loss)
         all_validation_accuracies.append(np.mean(accuracies))

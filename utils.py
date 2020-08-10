@@ -98,8 +98,8 @@ def predict_patient_3D_net(net, patient_data, do_mirroring, do_bayesian, num_rep
     try:
         predicted_segmentation = postprocess_prediction(predicted_segmentation)
     except:
-        print "post processing failed, probably due to empty segmentation (which in turn is due to empty time steps" \
-              " in the raw data)"
+        print("post processing failed, probably due to empty segmentation (which in turn is due to empty time steps" \
+              " in the raw data)")
     bayesian_predictions = stacked
     softmax_pred = stacked.mean(0)
     return predicted_segmentation, bayesian_predictions, softmax_pred

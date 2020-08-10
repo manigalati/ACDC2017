@@ -74,7 +74,8 @@ def preprocess_image(itk_image, is_seg=False, spacing_target=(1, 0.5, 0.5), keep
 
 
 def load_dataset(ids=range(101), root_dir="/home/fabian/drives/E132-Projekte/ACDC/new_dataset_preprocessed_for_2D_v2/"):
-    with open(os.path.join(root_dir, "patient_info.pkl"), 'r') as f:
+    print(root_dir)
+    with open(os.path.join(root_dir, "patient_info.pkl"), 'rb') as f:
         patient_info = pickle.load(f)
 
     data = {}
