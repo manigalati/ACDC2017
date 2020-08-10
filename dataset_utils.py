@@ -16,7 +16,7 @@
 import SimpleITK as sitk
 import os
 from multiprocessing import pool
-import cPickle
+import pickle
 import numpy as np
 from skimage.transform import resize
 
@@ -75,7 +75,7 @@ def preprocess_image(itk_image, is_seg=False, spacing_target=(1, 0.5, 0.5), keep
 
 def load_dataset(ids=range(101), root_dir="/home/fabian/drives/E132-Projekte/ACDC/new_dataset_preprocessed_for_2D_v2/"):
     with open(os.path.join(root_dir, "patient_info.pkl"), 'r') as f:
-        patient_info = cPickle.load(f)
+        patient_info = pickle.load(f)
 
     data = {}
     for i in ids:
@@ -116,7 +116,7 @@ def process_patient(args):
     if os.path.isfile(fname):
         images["es_seg"] = sitk.ReadImage(fname)
 
-    print id, images["es_seg"].GetSpacing()
+    print(id, images["es_seg"].GetSpacing())
 
     for k in images.keys():
         #print k
@@ -126,12 +126,12 @@ def process_patient(args):
     img_as_list = []
     for k in ['ed', 'ed_seg', 'es', 'es_seg']:
         if k not in images.keys():
-            print id, "has missing key:", k
+            print(id, "has missing key:", k)
         img_as_list.append(images[k][None])
     try:
         all_img = np.vstack(img_as_list)
     except:
-        print id, "has a problem with spacings"
+        print(id, "has a problem with spacings")
     np.save(os.path.join(folder_out, "pat_%03.0d" % id), all_img.astype(np.float32))
 
 
@@ -141,7 +141,7 @@ def generate_patient_info(folder):
     for id in range(151):
         fldr = os.path.join(folder, 'patient%03.0d'%id)
         if not os.path.isdir(fldr):
-            print "could not find dir of patient ", id
+            print("could not find dir of patient ", id)
             continue
         nfo = np.loadtxt(os.path.join(fldr, "Info.cfg"), dtype=str, delimiter=': ')
         patient_info[id] = {}
@@ -159,8 +159,8 @@ def run_preprocessing(folder="/media/fabian/My Book/datasets/ACDC/training/",
 
     if not os.path.isdir(folder_out):
         os.mkdir(folder_out)
-    with open(os.path.join(folder_out, "patient_info.pkl"), 'w') as f:
-        cPickle.dump(patient_info, f)
+    with open(os.path.join(folder_out, "patient_info.pkl"), 'wb') as f:
+        pickle.dump(patient_info, f)
 
     # beware of z spacing!!! see process_patient for more info!
     ids = range(101)
