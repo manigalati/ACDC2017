@@ -197,7 +197,7 @@ def create_data_gen_train(patient_data_train, BATCH_SIZE, num_classes, patch_siz
     # train transforms
     tr_transforms = []
     tr_transforms.append(MotionAugmentationTransform(0.1, 0, 20))
-    tr_transforms.append(MirrorTransform((3, 4)))
+    tr_transforms.append(MirrorTransform((1, 2)))
     tr_transforms.append(Convert3DTo2DTransform())
     tr_transforms.append(
         RndTransform(SpatialTransform(patch_size[1:], 112,
@@ -297,11 +297,11 @@ preprocess_fn = None
 min_size = INPUT_PATCH_SIZE
 
 # 4d predictions
-dataset_root_raw = "/media/fabian/My Book/datasets/ACDC/training/"
-predictions_4d_out_folder = "/home/fabian/code/ACDC/submission_stuff/results/4d_predictions_train"
+dataset_root_raw = "/content/ACDC2017/train_set_3d/"
+predictions_4d_out_folder = "/content/drive/My Drive/tesi/outt"
 target_spacing = (10., 1.25, 1.25)
 
-dataset_root_test = "/media/fabian/My Book/datasets/ACDC/testing/testing/"
+dataset_root_test = "/content/ACDC2017/train_set_3d/"
 test_out_folder = os.path.join(results_dir, "test_predictions")
 if not os.path.isdir(test_out_folder):
     os.mkdir(test_out_folder)

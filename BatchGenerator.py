@@ -30,7 +30,7 @@ class BatchGenerator(DataLoaderBase):
         seg = np.zeros((self.BATCH_SIZE, 1, self.PATCH_SIZE[0], self.PATCH_SIZE[1], self.PATCH_SIZE[2]),
                        dtype=np.float32)
         types = np.random.choice(['ed', 'es'], self.BATCH_SIZE, True)
-        patients = np.random.choice(self._data.keys(), self.BATCH_SIZE, True)
+        patients = np.random.choice([*self._data.keys()], self.BATCH_SIZE, True)
         pathologies = []
         for nb in range(self.BATCH_SIZE):
             if np.any(np.array(self._data[patients[nb]][types[nb]+'_data'].shape) < np.array(self.PATCH_SIZE)):

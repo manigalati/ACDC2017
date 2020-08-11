@@ -15,7 +15,7 @@
 
 import sys
 import lasagne
-import cPickle
+import pickle
 from abc import abstractmethod
 import theano
 
@@ -36,7 +36,7 @@ class NetworkArchitecture(object):
 
     def save_params(self, fname, **kwargs):
         with open(fname, 'w') as f:
-            cPickle.dump(lasagne.layers.get_all_param_values(self.output_layer, **kwargs), f)
+            pickle.dump(lasagne.layers.get_all_param_values(self.output_layer, **kwargs), f)
 
     def load_params(self, fname):
         with open(fname, 'r') as f:
@@ -50,11 +50,11 @@ class NetworkArchitecture(object):
             from Utils.draw_net import draw_to_file
             draw_to_file(lasagne.layers.get_all_layers(self.output_layer), fname)
         except ImportError:
-            print "Could not plot network architecture due to import error: ", sys.exc_info()
+            print("Could not plot network architecture due to import error: ", sys.exc_info())
         except IOError:
-            print "Could not plot network due to invalid file name %s" % fname, " error: ", sys.exc_info()
+            print("Could not plot network due to invalid file name %s" % fname, " error: ", sys.exc_info())
         except:
-            print "Could not plot network due to error: ", sys.exc_info()
+            print("Could not plot network due to error: ", sys.exc_info())
 
 class SegmentationArchitecture(NetworkArchitecture):
     def __init__(self):

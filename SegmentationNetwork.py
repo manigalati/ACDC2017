@@ -18,7 +18,7 @@ matplotlib.use('Agg')
 import lasagne
 import theano.tensor as T
 import numpy as np
-import cPickle
+import pickle
 from NetworkArchitecture import NetworkArchitecture, SegmentationArchitecture
 import theano
 
@@ -138,7 +138,7 @@ class SegmentationNetwork(SegmentationArchitecture):
         seg_output_nondet = lasagne.layers.get_output(self.seg_layer, self.input_var, deterministic=False,
                                                      batch_norm_update_averages=False,
                                                      batch_norm_use_averages=self.use_and_update_bn_averages)
-        from Utils.general_utils import softmax_helper
+        from utils import softmax_helper
         seg_output_det = softmax_helper(seg_output_det)
         seg_output_nondet = softmax_helper(seg_output_nondet)
         self.pred_seg_prob_det = theano.function([self.input_var], seg_output_det, updates=None)
@@ -161,7 +161,9 @@ class SegmentationNetwork(SegmentationArchitecture):
         all_dice_weights = []
 
         for batch in range(num_iters):
+            print("CULOCAZZO")
             data_dict = generator.next()
+            print("kmjd fdjslf sd")
             data = data_dict["data"].astype(floatX)
             seg = data_dict["seg_onehot"].astype(floatX).transpose(0, 2, 3, 4, 1).reshape((-1, self.num_classes))
             loss, acc, dc = fn(data, seg)
@@ -209,6 +211,8 @@ class SegmentationNetwork(SegmentationArchitecture):
         all_val_accs = []
         all_dice_scores_tr = []
         all_dice_scores_val = []
+
+        print("HAMTARO")
 
         epoch = 0
         while epoch < self.num_epochs:
