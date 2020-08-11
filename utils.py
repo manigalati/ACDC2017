@@ -266,7 +266,7 @@ def plotProgress(all_training_losses, all_training_accs, all_validation_losses, 
     if val_dice_scores is not None:
         assert len(val_dice_scores) == len(all_validation_losses)
         num_auc_scores_per_timestep = val_dice_scores.shape[1]
-        for auc_id in xrange(num_auc_scores_per_timestep):
+        for auc_id in range(num_auc_scores_per_timestep):
             ax2.plot(val_x_values, val_dice_scores[:, auc_id], linestyle=":", linewidth=4, markersize=10)
             ax2_legend_text.append(dice_labels[auc_id])
 
