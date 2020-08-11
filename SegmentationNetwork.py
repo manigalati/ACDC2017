@@ -161,9 +161,7 @@ class SegmentationNetwork(SegmentationArchitecture):
         all_dice_weights = []
 
         for batch in range(num_iters):
-            print("CULOCAZZO")
             data_dict = generator.next()
-            print("kmjd fdjslf sd")
             data = data_dict["data"].astype(floatX)
             seg = data_dict["seg_onehot"].astype(floatX).transpose(0, 2, 3, 4, 1).reshape((-1, self.num_classes))
             loss, acc, dc = fn(data, seg)
