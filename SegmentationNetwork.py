@@ -212,8 +212,6 @@ class SegmentationNetwork(SegmentationArchitecture):
         all_dice_scores_tr = []
         all_dice_scores_val = []
 
-        print("HAMTARO")
-
         epoch = 0
         while epoch < self.num_epochs:
             self._update_lr(epoch)
