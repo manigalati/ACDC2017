@@ -244,10 +244,10 @@ def run(config_file, fold=0):
         plotProgress(all_training_losses, all_training_accuracies, all_validation_losses, all_validation_accuracies,
                      os.path.join(results_dir, "%s.png" % EXPERIMENT_NAME), n_feedbacks_per_epoch, val_dice_scores=dice_scores,
                      dice_labels=["brain", "1", "2", "3", "4", "5"])
-        with open(os.path.join(results_dir, "%s_Params.pkl" % (EXPERIMENT_NAME)), 'w') as f:
-            cPickle.dump(lasagne.layers.get_all_param_values(output_layer_for_loss), f)
-        with open(os.path.join(results_dir, "%s_allLossesNAccur.pkl"% (EXPERIMENT_NAME)), 'w') as f:
-            cPickle.dump([all_training_losses, all_training_accuracies, all_validation_losses,
+        with open(os.path.join(results_dir, "%s_Params.pkl" % (EXPERIMENT_NAME)), 'wb') as f:
+            pickle.dump(lasagne.layers.get_all_param_values(output_layer_for_loss), f)
+        with open(os.path.join(results_dir, "%s_allLossesNAccur.pkl"% (EXPERIMENT_NAME)), 'wb') as f:
+            pickle.dump([all_training_losses, all_training_accuracies, all_validation_losses,
                           all_validation_accuracies, all_val_dice_scores], f)
         epoch += 1
 
