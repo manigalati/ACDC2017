@@ -35,12 +35,12 @@ class NetworkArchitecture(object):
         pass
 
     def save_params(self, fname, **kwargs):
-        with open(fname, 'w') as f:
+        with open(fname, 'wb') as f:
             pickle.dump(lasagne.layers.get_all_param_values(self.output_layer, **kwargs), f)
 
     def load_params(self, fname):
-        with open(fname, 'r') as f:
-            lasagne.layers.set_all_param_values(self.output_layer, cPickle.load(f))
+        with open(fname, 'rb') as f:
+            lasagne.layers.set_all_param_values(self.output_layer, pickle.load(f))
 
     def set_params(self, params):
         lasagne.layers.set_all_param_values(self.output_layer, params)

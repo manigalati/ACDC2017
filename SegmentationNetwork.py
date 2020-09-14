@@ -243,12 +243,12 @@ class SegmentationNetwork(SegmentationArchitecture):
                                      all_val_losses, all_val_accs, np.vstack(all_dice_scores_val), plot_fname)
 
             if latest_params_file is not None:
-                with open(latest_params_file, 'w') as f:
-                    cPickle.dump(best_params, f)
+                with open(latest_params_file, 'wb') as f:
+                    pickle.dump(best_params, f)
 
         if best_params_file is not None:
-            with open(best_params_file, 'w') as f:
-                cPickle.dump(best_params, f)
+            with open(best_params_file, 'wb') as f:
+                pickle.dump(best_params, f)
 
         lasagne.layers.set_all_param_values(self.output_layer, best_params)
         self.is_trained = True
