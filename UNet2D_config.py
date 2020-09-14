@@ -65,7 +65,7 @@ dataset_root_raw = "/content/ACDC2017/train_set_2d/"
 target_spacing = (None, 1.25, 1.25)
 min_size = val_min_size
 
-dataset_root_test = "/content/ACDC2017/train_set_2d/"
+dataset_root_test = "/content/ACDC2017/test_set/testing/"
 test_out_folder = os.path.join(results_dir, "test_predictions")
 if not os.path.isdir(test_out_folder):
     os.mkdir(test_out_folder)

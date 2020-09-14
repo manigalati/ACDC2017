@@ -301,7 +301,7 @@ dataset_root_raw = "/content/ACDC2017/train_set_3d/"
 predictions_4d_out_folder = "/content/drive/My Drive/tesi/outt"
 target_spacing = (10., 1.25, 1.25)
 
-dataset_root_test = "/content/ACDC2017/train_set_3d/"
+dataset_root_test = "/content/ACDC2017/test_set/testing/"
 test_out_folder = os.path.join(results_dir, "test_predictions")
 if not os.path.isdir(test_out_folder):
     os.mkdir(test_out_folder)
